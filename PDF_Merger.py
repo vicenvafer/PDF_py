@@ -1,21 +1,19 @@
-from PyPDF2 import PdfFileWriter
+from PyPDF2 import PdfMerger
 import sys
-merger = PdfFileWriter()
+
+merger = PdfMerger()
+
 param=0
-for param in sys.argv:
-    pdf = sys.argv[param+1]
-    merger.appendPagesFromReader(pdf)
+amount_of_pdfs = len(sys.argv[1:])
 
-merger.write("merged_pdf.pdf")
+
+while param<amount_of_pdfs:
+    first_pdf = param
+    pdf_file = sys.argv[first_pdf+1]
+    merger.append(pdf_file)
+    param+=1
+
+output = open("merged_pdf.pdf","wb")
+merger.write(output)
 merger.close()
-
-"""
-with open("dummy.pdf","rb") as file:
-    reader = PyPDF2.PdfFileReader(file)
-    page = reader.getPage(0)
-    page.rotateCounterClockwise(180)
-    writer = PyPDF2.PdfFileWriter()
-    writer.addPage(page)
-    with open("tilt.pdf","wb") as file2:
-        writer.write(file2)
-        """
+output.close()
